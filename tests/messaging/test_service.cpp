@@ -95,9 +95,7 @@ TEST(QiService, RemoteObjectCacheUnregister)
   p.server()->unregisterService(idx);
 
   PERSIST_ASSERT(fut = p.client()->service("serviceTest"), fut.hasError(), 1000);
-
 }
-
 
 TEST(QiService, RemoteObjectCacheABAUnregister)
 {
@@ -457,6 +455,35 @@ TEST(QiService, CallRemoteServiceInsideDtorService)
   // Have the client unregister the service
   // this should not deadlock
   p.client()->unregisterService(idCallDS).wait();
+}
+
+TEST(QiService, RemoteObjectCacheUnregisterFromClient)
+{
+  TestSessionPair p;
+
+  qi::SessionPtr server = p.server();
+  qi::SessionPtr client = p.client();
+
+  qi::DynamicObjectBuilder ob;
+  ob.advertiseMethod("reply", &reply);
+  qi::AnyObject obj(ob.object());
+  unsigned int idx = server->registerService("serviceTest", obj);
+
+  // Check that the servive can be retrieved
+  {
+    EXPECT_NO_THROW(server->service("serviceTest").value());
+    EXPECT_NO_THROW(client->service("serviceTest").value());
+  }
+
+  // The server unregister the service
+  // The client must not have the right to unregister services
+  server->unregisterService(idx).wait();
+
+  // serviceTest was unregistered so getting a proxy on it should be impossible
+  {
+    EXPECT_ANY_THROW(client->service("serviceTest").value());
+    EXPECT_ANY_THROW(server->service("serviceTest").value());
+  }
 }
 
 int main(int argc, char **argv)

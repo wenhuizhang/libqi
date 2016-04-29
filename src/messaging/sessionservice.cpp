@@ -422,15 +422,6 @@ namespace qi {
       }
     }
 
-    //look for already registered remote objects
-    {
-      boost::recursive_mutex::scoped_lock sl(_remoteObjectsMutex);
-      RemoteObjectMap::iterator it = _remoteObjects.find(service);
-      if (it != _remoteObjects.end()) {
-        return qi::Future<qi::AnyObject>(it->second);
-      }
-    }
-
     {
       boost::recursive_mutex::scoped_lock l(_requestsMutex);
       std::map<int, ServiceRequest*>::const_iterator it;
