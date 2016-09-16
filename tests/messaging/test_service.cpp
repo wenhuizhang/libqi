@@ -485,14 +485,3 @@ TEST(QiService, RemoteObjectCacheUnregisterFromClient)
     EXPECT_ANY_THROW(server->service("serviceTest").value());
   }
 }
-
-int main(int argc, char **argv)
-{
-  qi::Application app(argc, argv);
-#if defined(__APPLE__) || defined(__linux__)
-  setsid();
-#endif
-  TestMode::initTestMode(argc, argv);
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
