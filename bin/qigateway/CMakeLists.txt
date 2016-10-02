@@ -21,12 +21,3 @@ qi_create_bin(qi-gateway
   QI
   BOOST_PROGRAM_OPTIONS
   )
-
-if(WITH_BREAKPAD)
-  add_definitions(" -DWITH_BREAKPAD ")
-  add_definitions(" -DBREAKPAD_DUMP_DIR=\"\\\"/var/lib/minidump\\\"\" ")
-  qi_info("Breakpad utilities found. Enabling minidump generation.")
-  qi_use_lib(qi-gateway BREAKPAD)
-else()
-  qi_info("Breakpad utilities not found. Disabling minidump generation.")
-endif()

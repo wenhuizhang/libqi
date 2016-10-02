@@ -8,10 +8,6 @@
 #include <iostream>
 #include <string>
 
-#ifdef WITH_BREAKPAD
-# include <breakpad/breakpad.h>
-#endif
-
 #include <boost/program_options.hpp>
 #include <qi/os.hpp>
 #include <qi/application.hpp>
@@ -36,13 +32,6 @@ static bool attachToServiceDirectory(qi::Gateway& gw, const qi::Url& url)
 int main(int argc, char *argv[])
 {
   qi::Application app(argc, argv);
-
-#if defined(WITH_BREAKPAD) && defined(GATEWAY_BUILD_TAG)
-  BreakpadExceptionHandler eh(BREAKPAD_DUMP_DIR);
-  eh.setBuildTag(GATEWAY_BUILD_TAG);
-  qiLogInfo() << "Build tag: " GATEWAY_BUILD_TAG;
-#endif
-
 
   // declare the program options
   po::options_description desc("Usage:\n  qi-service masterAddress [options]\nOptions");
