@@ -14,8 +14,3 @@ endif()
 option(WITH_PERF     "Performances test" ON)
 
 add_subdirectory("qicli")
-add_subdirectory("qiclient")
-add_subdirectory("qiservice")
-add_subdirectory("qimaster")
-add_subdirectory("qigateway")
-add_subdirectory("perfs")
